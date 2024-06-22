@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyReceipts.App", "MyReceipts.App\MyReceipts.App.csproj", "{5F6E19F1-1205-434B-9D06-1D43250297AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyReceipts.Application", "MyReceipts.Application\MyReceipts.Application.csproj", "{7342FB0E-7954-490E-AFDE-DABA1EEC1F45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{5F6E19F1-1205-434B-9D06-1D43250297AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F6E19F1-1205-434B-9D06-1D43250297AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F6E19F1-1205-434B-9D06-1D43250297AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7342FB0E-7954-490E-AFDE-DABA1EEC1F45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7342FB0E-7954-490E-AFDE-DABA1EEC1F45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7342FB0E-7954-490E-AFDE-DABA1EEC1F45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7342FB0E-7954-490E-AFDE-DABA1EEC1F45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
