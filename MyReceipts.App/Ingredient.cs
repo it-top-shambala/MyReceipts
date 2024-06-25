@@ -5,7 +5,9 @@ namespace Application;
 public class Ingredient
 {
     private const int ZERO = 0;
-    
+
+    [Column("id")] public int Id { get; set; }
+
     [Column("ingredient_name")]
     public string Name
     {
