@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FoodApi;
+﻿namespace FoodApi;
 
 public class HttpHelper
 {
@@ -18,17 +12,29 @@ public class HttpHelper
         };
     }
 
-    public string GetResponseBody(string requiestUri)
+    public string GetResponseBody(string requestUri)
     {
-        var response = GetResponse(requiestUri);
+        var response = GetResponse(requestUri);
+        if (response is null)
+            return String.Empty;
+
         var res = response.Content.ReadAsStringAsync().Result;
         return res;
     }
 
     private HttpResponseMessage? GetResponse(string requiestUri)
     {
-        HttpResponseMessage response = _httpClient.GetAsync(requiestUri).Result;
-        response.EnsureSuccessStatusCode();
+        var response = new HttpResponseMessage();
+        try
+        {
+            response = _httpClient.GetAsync(requiestUri).Result;
+            response.EnsureSuccessStatusCode();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            response = null;
+        }
         return response;
     }
 }
