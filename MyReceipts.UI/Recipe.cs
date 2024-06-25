@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
 namespace Application;
 
@@ -25,12 +26,14 @@ public class Recipe
     }
     public List<Ingridient> Ingridients { get; set; }
 
-    public void ShowIngridients()
+    public string ShowIngridients(List<Ingridient> ingridients)
     {
-        foreach (var item in Ingridients)
+        StringBuilder sb = new StringBuilder();
+        foreach (var item in ingridients)
         {
-            Console.WriteLine($"{item.Name} - {item.Quantity}");
+            sb.Append(item.Name).Append(" - ").Append(item.Quantity);
         }
+        return sb.ToString();
     }
     
 }
