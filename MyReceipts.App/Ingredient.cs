@@ -13,9 +13,9 @@ public class Ingredient
     public string Name
     {
         get => Name;
-        set => Name = (!string.IsNullOrEmpty(value) 
+        set => Name = (string.IsNullOrEmpty(value) 
             ? throw new ArgumentNullException() 
-            : null)!;
+            : value);
     }
     
     [Column("quantity")]
@@ -25,6 +25,15 @@ public class Ingredient
         set => Quantity = value <= ZERO
             ? throw new ArgumentOutOfRangeException(nameof(Quantity))
             : value;
+    }
+    
+    [Column("unit")]
+    public string Unit
+    {
+        get => Unit;
+        set => Unit = (string.IsNullOrEmpty(value) 
+            ? throw new ArgumentNullException() 
+            : value);
     }
 
     public List<Recipe> Recipes { get; set; }
