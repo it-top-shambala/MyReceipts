@@ -2,39 +2,28 @@
 
 namespace Application;
 
+[Table("table_ingredients")]
 public class Ingredient
 {
     private const int ZERO = 0;
 
     [Column("id")] 
-    public int Id { get; set; }
+    public int Id { get; init; }
 
-    [Column("ingredient_name")]
-    public string Name
-    {
-        get => Name;
-        set => Name = (string.IsNullOrEmpty(value) 
-            ? throw new ArgumentNullException() 
-            : value);
-    }
-    
-    [Column("quantity")]
-    public int Quantity
-    {
-        get => Quantity;
-        set => Quantity = value <= ZERO
-            ? throw new ArgumentOutOfRangeException(nameof(Quantity))
-            : value;
-    }
-    
-    [Column("unit")]
-    public string Unit
-    {
-        get => Unit;
-        set => Unit = (string.IsNullOrEmpty(value) 
-            ? throw new ArgumentNullException() 
-            : value);
-    }
+    [Column("ingredient_name")] 
+    public string? Name { get; set; }
 
-    public List<Recipe> Recipes { get; set; }
+
+    [Column("quantity")] 
+    public int Quantity { get; set; }
+
+
+    [Column("unit")] 
+    public string? Unit { get; set; }
+    
+    [Column("recipe_id")] 
+    public int RecipeId { get; set; }
+
+
+    public List<Recipe>? Recipes { get; init; }
 }

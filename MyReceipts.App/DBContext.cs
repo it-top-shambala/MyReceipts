@@ -3,16 +3,15 @@ namespace Application;
 
 public class DBContext :DbContext
 {
-    public DbSet<Recipe> Recipes { get; set; }
-
     public DBContext()
     {
-        Database.EnsureDeleted();
-        Database.EnsureCreated();
     }
+    
+    public DbSet<Recipe> Recipes { get; set; }
+    public DbSet<Ingredient> Ingredients { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("D://recipes.db");
+        optionsBuilder.UseSqlite("Data Source=D:\\Study\\MyReceipts\\recipes.db");
     }
 }
