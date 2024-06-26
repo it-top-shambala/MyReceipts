@@ -19,7 +19,7 @@ public class Cli
         PrintLine(message, ConsoleColor.Red);
     }
     
-    public static string ListPrint(List<string> list)
+    public static string PrintList(List<string> list)
     {
         StringBuilder sb = new StringBuilder();
         foreach (var item in list)
