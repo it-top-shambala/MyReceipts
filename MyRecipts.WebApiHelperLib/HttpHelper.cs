@@ -1,5 +1,4 @@
-﻿using Logger;
-using Logger.File;
+﻿using Logger.File;
 using MyRecipts.WebApiHelperLib.Exceptions;
 using MyRecipts.WebApiHelperLib.Models;
 using System.Text.Json;
@@ -9,7 +8,7 @@ namespace FoodApi;
 public class HttpHelper
 {
     private HttpClient _httpClient;
-    private string PATH_CFG = "Configs\\ConfigHttpHelper.json";
+    private const string PATH_CFG = "Configs\\ConfigHttpHelper.json";
     private ConfigHttpHelper _config;
     private LogToFile _logger;
 
@@ -38,7 +37,6 @@ public class HttpHelper
             _logger.Error($"ошибка при чтение ответа http запроса: {ex.Message}");
             return String.Empty;
         }
-        
     }
 
     private HttpResponseMessage? GetResponse(string requiestUri)
@@ -55,6 +53,7 @@ public class HttpHelper
             return null;
         }
     }
+
     private void InitConfig()
     {
         try

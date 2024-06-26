@@ -9,7 +9,7 @@ public class RecipeHelper
 {
     private HttpHelper _httpHelper;
     private LogToFile _logger;
-    private string PATH_CFG = "Configs\\ConfigRecipeHelper.json";
+    private const string PATH_CFG = "Configs\\ConfigRecipeHelper.json";
     private ConfigRecipeHepler _config;
 
     public RecipeHelper()
