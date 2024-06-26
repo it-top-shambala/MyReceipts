@@ -1,4 +1,5 @@
 ﻿namespace Application;
+
 using tui_netcore;
 
 public class Application
@@ -7,7 +8,7 @@ public class Application
 
     public readonly DBContext Database;
     public Cli Cli;
-    
+
     #endregion
 
     #region Constructors
@@ -25,7 +26,7 @@ public class Application
     {
         Tui startWindow = new Tui();
         startWindow.Title = " Приветствие ";
-        startWindow.Body = "Добро пожаловать в поиск";
+        startWindow.Body = "Добро пожаловать в поиск рецептов";
         startWindow.DrawOk();
     }
 
@@ -42,6 +43,29 @@ public class Application
         });
         return choice;
     }
+    
+    private void ShowRecipeWindow(Recipe recipe)
+    {
+        Tui recipeWindow = new Tui();
+        recipeWindow.Title = "Рецепт";
+        recipeWindow.Body = $"\n\tНазвание: {recipe.Name}\n" +
+                            $"\tКалорийность: {recipe.CalorieContent}\n" +
+                            $"\tИнгредиенты: {recipe.ShowIngridients(recipe.Ingridients)}";
+        recipeWindow.DrawOk();
+    }
+    
+    private void ShowIngridientsSearchResult(IEnumerable<Recipe> recipes)
+    {
+        Tui recipesWindow = new Tui();
+        recipesWindow.Title  = "Найденные рецепты";
+        recipesWindow.Body = "Рецепты: ";
+        var choice = recipesWindow.DrawList(recipes.Select(r  => r.Name).ToList());
+        if (choice != null)
+        {
+            var recipe = recipes.First(r => r.Name == choice);
+            ShowRecipeWindow(recipe);
+        }
+    }
 
     public void SearchRecipeByName(DBContext db)
     {
@@ -50,37 +74,29 @@ public class Application
         titleSearchWindow.Body = "Введите название рецепта";
         string userRecipeName = titleSearchWindow.DrawInput();
         var dbRecipes = db.Recipes.ToList().Where(r => r.Name == userRecipeName);
-        foreach (var recipe in dbRecipes)
+        if (dbRecipes.Any(r => r.Name == userRecipeName))
         {
-            Console.WriteLine($"Название: {recipe.Name}");
-            Console.WriteLine($"Ингредиенты:");
-            recipe.ShowIngridients(recipe.Ingridients);
-            Console.WriteLine("************************");
+            var recipe = dbRecipes.First(r => r.Name == userRecipeName);
+            ShowRecipeWindow(recipe);
         }
     }
 
     public void SearchRecipeByIngridients(DBContext db)
     {
         Tui ingridientsSearchWindow = new Tui();
-        ingridientsSearchWindow.Title  =  "Поиск по ингредиентам";
-        ingridientsSearchWindow.Body  =  "Введите ингредиент";
+        ingridientsSearchWindow.Title = "Поиск по ингредиентам";
+        ingridientsSearchWindow.Body = "Введите ингредиент";
         List<string> userIngridientsList = ingridientsSearchWindow.DrawInput().Split(',').ToList();
-        Tui ingWindow  = new Tui();
-        ingWindow.Title  =   "Проверка ингридиентов";
-        ingWindow.Body = $"Введённые ингредиенты: {Cli.ListPrint(userIngridientsList)}";
-        var ynChoice = ingWindow.DrawYesNo();
-        if (ynChoice = true)
+        var dbRecipes = db.Recipes.
+            ToList()
+                .Where(r => r.Ingridients.Any(i => userIngridientsList.Contains(i.Name)));
+        if (dbRecipes.Any(r  => r.Ingridients.Any(i  => userIngridientsList.Contains(i.Name))));
         {
-            var dbRecipes = db.Recipes.Where(r => r.Ingridients.Any(i => userIngridientsList.Contains(i.Name)));
-            foreach (var recipe in dbRecipes)
-            {
-                var recipeWindow = new Tui();
-                recipeWindow.Title = $"Рецепт {recipe.Name}";
-                recipeWindow.Body = $"Ингредиенты: {recipe.ShowIngridients(recipe.Ingridients)}";
-                
-            }
+            ShowIngridientsSearchResult(dbRecipes);
         }
-        
     }
+    
+    
+
     #endregion
 }
