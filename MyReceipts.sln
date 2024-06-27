@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyReceipts.App", "MyReceipts.App\MyReceipts.App.csproj", "{5F6E19F1-1205-434B-9D06-1D43250297AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyReceipts.Application", "MyReceipts.Application\MyReceipts.Application.csproj", "{7342FB0E-7954-490E-AFDE-DABA1EEC1F45}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyReceipts.UI", "MyReceipts.UI\MyReceipts.UI.csproj", "{7342FB0E-7954-490E-AFDE-DABA1EEC1F45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,6 @@
-﻿namespace Application;
+﻿using System.Text;
+
+namespace Application;
 
 using tui_netcore;
 
@@ -37,21 +39,10 @@ public class Application
         choiceWindow.Body = "Выберите что вы хотите сделать";
         string choice = choiceWindow.DrawList(new List<string>()
         {
-            "1. Поиск рецепта по названию",
-            "2. Поиск рецепта по ингредиентам",
-            "3. Выход"
+            "1. Поиск рецепта по ингредиентам",
+            "2. Выход"
         });
         return choice;
-    }
-    
-    private void ShowRecipeWindow(Recipe recipe)
-    {
-        Tui recipeWindow = new Tui();
-        recipeWindow.Title = "Рецепт";
-        recipeWindow.Body = $"\n\tНазвание: {recipe.Name}\n" +
-                            $"\tКалорийность: {recipe.CalorieContent}\n" +
-                            $"\tИнгредиенты: {recipe.ShowIngridients(recipe.Ingridients)}";
-        recipeWindow.DrawOk();
     }
     
     private void ShowIngridientsSearchResult(IEnumerable<Recipe> recipes)
@@ -66,20 +57,18 @@ public class Application
             ShowRecipeWindow(recipe);
         }
     }
-
-    public void SearchRecipeByName(DBContext db)
+    
+    private void ShowRecipeWindow(Recipe recipe)
     {
-        Tui titleSearchWindow = new Tui();
-        titleSearchWindow.Title = "Поиск по названию";
-        titleSearchWindow.Body = "Введите название рецепта";
-        string userRecipeName = titleSearchWindow.DrawInput();
-        var dbRecipes = db.Recipes.ToList().Where(r => r.Name == userRecipeName);
-        if (dbRecipes.Any(r => r.Name == userRecipeName))
-        {
-            var recipe = dbRecipes.First(r => r.Name == userRecipeName);
-            ShowRecipeWindow(recipe);
-        }
+        Tui recipeWindow = new Tui();
+        recipeWindow.Title = "Рецепт";
+        recipeWindow.Body = $"\n\tНазвание: {recipe.Name}\n" +
+                            $"\tКалорийность: {recipe.CalorieContent}\n" +
+                            $"\tИнгредиенты: {ShowIngridients(recipe)}";
+        recipeWindow.DrawOk();
+        
     }
+    
 
     public void SearchRecipeByIngridients(DBContext db)
     {
@@ -95,8 +84,33 @@ public class Application
             ShowIngridientsSearchResult(dbRecipes);
         }
     }
+
+    private void AddToFavorites(Recipe recipe, DBContext db)
+    {
+        Tui favoritesWindow = new Tui();
+        favoritesWindow.Title = "Добавление в избранное";
+        favoritesWindow.Body = "Добавить рецепт в избранное?";
+        var choice = favoritesWindow.DrawYesNo();
+        if (choice == true)
+        {
+            db.Recipes.Add(recipe);
+            db.SaveChanges();
+        }
+        else
+        {
+            favoritesWindow.DrawOk();
+        }
+    }
     
-    
+    private string ShowIngridients(Recipe recipe)
+    {
+        StringBuilder sb = new StringBuilder();
+        foreach (var item in recipe.Ingridients)
+        {
+            sb.Append(item.Name).Append(" - ").Append(item.Quantity);
+        }
+        return sb.ToString();
+    }
 
     #endregion
 }
