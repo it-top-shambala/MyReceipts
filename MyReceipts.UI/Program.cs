@@ -1,7 +1,6 @@
 ﻿using Application;
 
-var db = new DBContext();
-var app = new Application.Application(db);
+var app = new AppUI();
 app.StartMenu();
 var userChoice = app.ChoiceMenu();
 while (userChoice != "2. Выход")
@@ -9,7 +8,7 @@ while (userChoice != "2. Выход")
     switch (userChoice)
     {
         case "1. Поиск рецепта по ингредиентам":
-            app.SearchRecipeByIngridients(app.Database);
+            app.SearchByIngridients();
             break;
         case "2. Выход":
             break;
