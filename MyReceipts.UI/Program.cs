@@ -9,6 +9,8 @@ while (userChoice != "2. Выход")
     {
         case "1. Поиск рецепта по ингредиентам":
             app.SearchByIngridients();
+            var favSystemChoice = app.FavouriteSystem();
+            app.FavouriteWindow(favSystemChoice, userChoice);
             break;
         case "2. Выход":
             break;
