@@ -20,7 +20,8 @@ classDiagram
     }
 
  class DBContext{
-        +DBSet <Recipes>
+        +DBSet <Recipes> Recipes
+        +DbSet<Ingredient> Ingredients
         +DBContext()
         +void OnConfiguring
     }
@@ -125,4 +126,37 @@ classDiagram
  ConfighttpHelper --* ConfigRecipeHepler
  MissedIngredient --> Recipe
  UsedIngredient --> Recipe
+
+ class AppUI{
+    -Recipe recipe
+    -List<Recipe> Recipes
+    +Cli Cli
+    +void StartMenu()
+    +string ChoiceMenu()
+    +void SearchByIngridients()
+    -void ShowSearchResult(List<Recipe> recipes)
+    -void ShowRecipeWindow (Recipe recipe)
+    -string ShowIngridients(Recipe recipe)
+    +string FavouriteSystem()
+    +void FavouriteWindow(string favSysChoice, string menuChoice)
+ }
+
+ class RecipeUI{
+    -const int ZERO
+    +int Id
+    +string? Name
+    +int CalorieContent
+    +int IngredientId
+    +List<Ingredient>? Ingredients
+ }
+
+ class IngredientUI {
+    -const int ZERO
+    +int Id
+    +string? Name
+    +int Quantity
+    +string? Unit
+    +int RecipeId
+    +List<Recipe>? Recipes
+ }
     ```
