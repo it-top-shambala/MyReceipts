@@ -1,21 +1,8 @@
 ﻿using System.Text;
-using FoodApi;
-using MyRecipts.WebApiHelperLib.Models;
-
-namespace Application;
-
 using tui_netcore;
 
 public class AppUI
 {
-    #region Properties
-    // TODO: Добавить БД
-    private Recipe recipe; //Заглушка (Заменить на модель рецепта из WebApi);
-    private List<Recipe> Recipes; //Заглушка(Заменить на рецепты из WebApi);
-    public Cli Cli;
-
-    #endregion
-
     #region Methods
 
     public void StartMenu()
@@ -40,16 +27,22 @@ public class AppUI
     }
 
 
-    public void SearchByIngridients()
+    /*public void SearchByIngridientsWindow()
     {
         Tui ingridientsSearchWindow = new Tui();
         ingridientsSearchWindow.Title = "Поиск по ингредиентам";
         ingridientsSearchWindow.Body = "Введите ингредиент";
-        List<string> userIngridientsList = ingridientsSearchWindow.DrawInput().Split(',').ToList();
-        if (Recipes != null)
+        List<string> userIngridientsList = ingridientsSearchWindow.DrawInput()!.Split(',').ToList();
+        //TODO: Добавить лист рецептов из WebApi которые содержат ингридиенты
+        try
         {
-            ShowSearchResult(Recipes); //TODO: Заменить Recipes на список рецептов из WebApi
+            ShowSearchResult(Recipes); //TODO: Заменить на WebApi
         }
+        catch (Exception ex)
+        {
+            ErrorWindow(ex);
+        }
+        
     }
 
     private void ShowSearchResult(List<Recipe> recipes) //TODO: Заменить Recipes на список рецептов из WebApi
@@ -58,14 +51,19 @@ public class AppUI
         recipesWindow.Title = "Найденные рецепты";
         recipesWindow.Body = "Рецепты: ";
         var choice = recipesWindow.DrawList(recipes.Select(r => r.Name).ToList()); //TODO: Заменить LINQ запрос на подходящий из модели рецепта WebApi
-        if (choice != null)
+        
+        try
         {
             Recipe recipe = recipes.First(r => r.Name == choice); //TODO: Заменить LINQ запрос на подходящий из модели рецепта WebApi
             ShowRecipeWindow(recipe); // Это временная ошибка она будет исправлена когда будет добавлены рецепты из WebApi
         }
+        catch (Exception ex)
+        {
+          ErrorWindow(ex);
+        }
     }
 
-    private void ShowRecipeWindow(Recipe recipe)
+    private void ShowRecipeWindow(Recipe recipe) //TODO: Заменить Recipe на рецепт из WebApi
     {
         Tui recipeWindow = new Tui();
         recipeWindow.Title = "Рецепт";
@@ -76,15 +74,15 @@ public class AppUI
 
     private string ShowIngridients(Recipe recipe)
     {
-        StringBuilder sb = new StringBuilder();
-        //TODO: Добавить foreach где stringBuilder будет создавать список ингредиентов из рецепта (пример ниже)
-        /*foreach (var item in recipe.UsedIngredients)
+        string result = null;
+        foreach (var item in recipe.UsedIngredients)
         {
-            sb.Append(item.Name).Append(" - ").Append(item.Amount).Append(" - ").Append(item.Unit);
-        }*/
+            
+        }
 
-        return sb.ToString();
+        return result;
     }
+    */
     
     public string FavouriteSystem()
     {
@@ -113,6 +111,13 @@ public class AppUI
         {
             menuChoice = ChoiceMenu();
         }
+    }
+
+    private void ErrorWindow(Exception ex)
+    {
+        Tui ErrorWindow = new Tui();
+        ErrorWindow.Title = "Ошибка";
+        ErrorWindow.Body =  ex.Message;
     }
 
     #endregion

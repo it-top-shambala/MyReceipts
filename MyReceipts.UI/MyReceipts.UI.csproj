@@ -1,21 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>Application</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="fc.tui-core" Version="0.0.7" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.6" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\MyReceipts.App\MyReceipts.App.csproj" />
-      <ProjectReference Include="..\MyRecipts.WebApiHelperLib\MyRecipts.WebApiHelperLib.csproj" />
     </ItemGroup>
 
 </Project>
