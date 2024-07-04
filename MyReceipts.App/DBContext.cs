@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-namespace Application;
+
+namespace MyReceipts.App;
 
 public class DBContext :DbContext
 {
@@ -7,8 +8,8 @@ public class DBContext :DbContext
     {
     }
     
-    public DbSet<Recipe> Recipes { get; set; }
-    public DbSet<Ingredient> Ingredients { get; set; }
+    public DbSet<RecipeUI> Recipes { get; set; }
+    public DbSet<IngredientUI> Ingredients { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
