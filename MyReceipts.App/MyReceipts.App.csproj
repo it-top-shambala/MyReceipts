@@ -17,6 +17,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\MyReceipts.UI\MyReceipts.UI.csproj" />
+        <ProjectReference Include="..\MyRecipts.WebApiHelperLib\MyRecipts.WebApiHelperLib.csproj" />
     </ItemGroup>
 
 </Project>

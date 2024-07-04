@@ -10,4 +10,8 @@
       <PackageReference Include="fc.tui-core" Version="0.0.7" />
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\MyRecipts.WebApiHelperLib\MyRecipts.WebApiHelperLib.csproj" />
+    </ItemGroup>
+
 </Project>

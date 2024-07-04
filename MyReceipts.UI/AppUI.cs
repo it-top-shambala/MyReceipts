@@ -1,8 +1,15 @@
-﻿using System.Text;
+﻿using FoodApi;
 using tui_netcore;
+using MyRecipts.WebApiHelperLib.Models;
 
 public class AppUI
 {
+    #region Props
+
+    private static RecipeHelper _recipeHelper;
+
+    #endregion
+
     #region Methods
 
     public void StartMenu()
@@ -26,99 +33,62 @@ public class AppUI
         return choice;
     }
 
-
-    /*public void SearchByIngridientsWindow()
+    public void SearchByIngridients()
     {
-        Tui ingridientsSearchWindow = new Tui();
-        ingridientsSearchWindow.Title = "Поиск по ингредиентам";
-        ingridientsSearchWindow.Body = "Введите ингредиент";
-        List<string> userIngridientsList = ingridientsSearchWindow.DrawInput()!.Split(',').ToList();
-        //TODO: Добавить лист рецептов из WebApi которые содержат ингридиенты
-        try
+        bool choice = true;
+        while (choice != false)
         {
-            ShowSearchResult(Recipes); //TODO: Заменить на WebApi
+            Tui ingridientsSearchWindow = new Tui();
+            ingridientsSearchWindow.Title = "Поиск по ингредиентам";
+            ingridientsSearchWindow.Body = "Введите ингредиент";
+            IEnumerable<string> userIngridientsList = ingridientsSearchWindow.DrawInput()!.Split(',').ToList();
+            List<Recipe>? webApiRecipes = _recipeHelper.GetRecipes(userIngridientsList);
+            var foundRecipes = webApiRecipes
+                .Where(r => r.UsedIngredients.Exists(i => userIngridientsList.Contains(i.Name))).ToList();
+            choice = RecipesSystem(foundRecipes);
         }
-        catch (Exception ex)
-        {
-            ErrorWindow(ex);
-        }
-        
     }
 
-    private void ShowSearchResult(List<Recipe> recipes) //TODO: Заменить Recipes на список рецептов из WebApi
+    private bool RecipesSystem(List<Recipe> recipes)
+    {
+        return FoundRecipesWindow(recipes);
+    }
+    
+    private bool FoundRecipesWindow(List<Recipe> recipes) 
     {
         Tui recipesWindow = new Tui();
         recipesWindow.Title = "Найденные рецепты";
         recipesWindow.Body = "Рецепты: ";
-        var choice = recipesWindow.DrawList(recipes.Select(r => r.Name).ToList()); //TODO: Заменить LINQ запрос на подходящий из модели рецепта WebApi
-        
-        try
-        {
-            Recipe recipe = recipes.First(r => r.Name == choice); //TODO: Заменить LINQ запрос на подходящий из модели рецепта WebApi
-            ShowRecipeWindow(recipe); // Это временная ошибка она будет исправлена когда будет добавлены рецепты из WebApi
-        }
-        catch (Exception ex)
-        {
-          ErrorWindow(ex);
-        }
+        var choice = recipesWindow.DrawList(recipes.Select<Recipe, string>(r => r.Title).ToList());
+        var recipe = recipes.First(r => r.Title == choice); 
+        return ShowRecipeWindow(recipe);
     }
 
-    private void ShowRecipeWindow(Recipe recipe) //TODO: Заменить Recipe на рецепт из WebApi
+    private bool ShowRecipeWindow(Recipe recipe)
     {
         Tui recipeWindow = new Tui();
         recipeWindow.Title = "Рецепт";
-        recipeWindow.Body = $"\n\tНазвание: {recipe.Name}\n" +
-                            $"\tИнгредиенты: {ShowIngridients(recipe)}";
-        recipeWindow.DrawOk();
+        recipeWindow.Body = $"\n\tНазвание: {recipe.Title}\n" +
+                            $"\tИнгредиенты: {ShowIngridients(recipe)}\n" +
+                            $"\tВернуться на экран рецептов?";
+        return recipeWindow.DrawYesNo();
     }
 
     private string ShowIngridients(Recipe recipe)
     {
-        string result = null;
-        foreach (var item in recipe.UsedIngredients)
-        {
-            
-        }
+        string result = string.Join(", ", recipe.UsedIngredients.Select(i => i.Name));
 
         return result;
     }
-    */
     
-    public string FavouriteSystem()
+    private static void ErrorWindow(Exception ex)
     {
-        Tui favouriteChoiceWindow = new Tui();
-        favouriteChoiceWindow.Title = "Избранное?";
-        favouriteChoiceWindow.Body = "Добавить рецепт в избранное?";
-        var choice = favouriteChoiceWindow.DrawList(new List<string>()
-        {
-            "Да",
-            "Нет"
-        });
-        return choice;
+        Tui errorWindow = new Tui();
+        errorWindow.Title = "Ошибка";
+        errorWindow.Body = ex.Message;
     }
-
-    public void FavouriteWindow(string favSysChoice, string menuChoice)
-    {
-        if ( favSysChoice == "Да")
-        {
-            // TODO: добавление рецепта в избранное(БД)
-            var addRecipeWindow  = new Tui();
-            addRecipeWindow.Title  =  "Избранный рецепт";
-            addRecipeWindow.Body =  "Рецепт был добавлен в избранное";
-            addRecipeWindow.DrawOk();
-        }
-        else
-        {
-            menuChoice = ChoiceMenu();
-        }
-    }
-
-    private void ErrorWindow(Exception ex)
-    {
-        Tui ErrorWindow = new Tui();
-        ErrorWindow.Title = "Ошибка";
-        ErrorWindow.Body =  ex.Message;
-    }
+    
+    //TODO: Сделать реализацию системы избранных рецептов и отправку в ДБ
 
     #endregion
 }
