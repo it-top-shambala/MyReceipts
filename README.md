@@ -32,7 +32,6 @@ classDiagram
     + Application()
     +void StartMenu()
     +String ChoiceMenu()
-    +void SearchRecipeByName()
     +void SearchRecipeByIngridients()
  }
  
@@ -44,21 +43,25 @@ classDiagram
 
  class RecipeHelper {
     -HttpHelper _httpHelper
-    -const string BASE_URI
-    -const string PATH_CFG
-    -String _apiKey
+    -LogToFile _logger
+    -const string PATH_CFG = "Configs\\ConfigRecipeHelper.json"
+    -ConfigRecipeHepler _config
     +RecipeHelper()
-    +List<Recipe>? GetRecipes
-    -String GetResponseJsonFromHttpCLient()
-    -string CreateRequiestUri()
-    -void GetApiKeyFromJson()
+    +List<Recipe>? GetRecipes(IEnumerable<string> ingredients)
+    -string GetResponseJsonFromHttpCLient(IEnumerable<string> ingredients)
+    -string CreateRequiestUri(IEnumerable<string> ingredients)
+    -void InitConfig()
  }
 
  class HttpHelper{
     -HttpClient _httpClient
-    +HttpHelper()
-    +string GetResponseBody()
-    -HttpResponseMessage? GetResponse()
+    +HttpHelper(string baseUri)
+    -const string PATH_CFG = "Configs\\ConfigHttpHelper.json"
+    -ConfigHttpHelper _config
+    -LogToFile _logger
+    +string GetResponseBody(string requestUri)
+    -HttpResponseMessage? GetResponse(string requiestUri)
+    -void InitConfig()
  }
 
  RecipeHelper --* HttpHelper
@@ -159,4 +162,9 @@ classDiagram
     +int RecipeId
     +List<Recipe>? Recipes
  }
+
+ Cli --> AppUI
+ RecipeUI --> AppUI
+ RecipeUI --o IngredientUI
+ IngredientUI --o RecipeUI
     ```
