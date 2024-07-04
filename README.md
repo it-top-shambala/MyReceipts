@@ -164,7 +164,8 @@ classDiagram
  }
 
  Cli --> AppUI
- RecipeUI --> AppUI
+ RecipeUI --> DBContext
  RecipeUI --o IngredientUI
  IngredientUI --o RecipeUI
+ Recipe --* AppUI 
     ```
