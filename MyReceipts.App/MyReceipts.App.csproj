@@ -16,4 +16,8 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.6" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\MyRecipts.WebApiHelperLib\MyRecipts.WebApiHelperLib.csproj" />
+    </ItemGroup>
+
 </Project>

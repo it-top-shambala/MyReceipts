@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Application;
+namespace MyReceipts.App;
 
 [Table("table_recipes")]
-public class Recipe
+public class RecipeUI
 {
     private const int ZERO = 0;
     [Column("id")]
@@ -18,5 +18,5 @@ public class Recipe
     [Column("ingredient_id")] 
     public int IngredientId { get; set; }
 
-    public List<Ingredient>? Ingredients { get; init; }
+    public List<IngredientUI>? Ingredients { get; set; }
 }
