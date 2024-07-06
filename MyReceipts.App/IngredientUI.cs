@@ -25,5 +25,5 @@ public class IngredientUI
     public int RecipeId { get; set; }
 
 
-    public List<RecipeUI>? Recipes { get; init; }
+    public List<RecipeUI>? Recipes { get; set; }
 }
