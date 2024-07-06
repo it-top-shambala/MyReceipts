@@ -47,7 +47,6 @@ namespace MyReceipts.App
             var recipe = new RecipeUI();
             recipe.Name = recipe1.Title;
             //            recipe.CalorieContent = 1;                                             //?unclear
-            recipe.Ingredients = new List<IngredientUI>();
             return recipe;
         }
 
