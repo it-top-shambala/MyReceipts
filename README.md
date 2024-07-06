@@ -167,5 +167,19 @@ classDiagram
  RecipeUI --> DBContext
  RecipeUI --o IngredientUI
  IngredientUI --o RecipeUI
- Recipe --* AppUI 
+
+ class DataBaseWorker{
+    -LogToFile _logger = new LogToFile()
+    +void SaveFavoriteRecipes(List<Recipe> recipes)
+    -RecipeUI Recipe1ConvertRecipe(Recipe recipe1)
+    -IngredientUI FusionIngredientsToMissed(MissedIngredient ingredientFromWebApi)
+    -IngredientUI FusionIngredientsToUsed(UsedIngredient ingredientFromWebApi)
+    +IEnumerable <RecipeUI> GetRecipes()
+    -void SaveToDb(List <RecipeUI> recipes)
+ }
+
+ Recipe --> RecipeHelper
+ DataBaseWorker --> DBContext
+ AppUI --> RecipeHelper
+ HttpHelper --> DataBaseWorker
     ```
