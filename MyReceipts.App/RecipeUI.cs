@@ -18,5 +18,5 @@ public class RecipeUI
     [Column("ingredient_id")] 
     public int IngredientId { get; set; }
 
-    public List<IngredientUI>? Ingredients { get; init; }
+    public List<IngredientUI>? Ingredients { get; set; }
 }
