@@ -7,7 +7,7 @@ public class AppUI
     #region Props
 
     private static RecipeHelper _recipeHelper;
-
+    private List<Recipe>? webApiRecipes;
     #endregion
 
     #region Methods
@@ -28,7 +28,7 @@ public class AppUI
         string choice = choiceWindow.DrawList(new List<string>()
         {
             "1. Поиск рецепта по ингредиентам",
-            "2. Выход"
+            "2. Выход" 
         });
         return choice;
     }
@@ -42,7 +42,7 @@ public class AppUI
             ingridientsSearchWindow.Title = "Поиск по ингредиентам";
             ingridientsSearchWindow.Body = "Введите ингредиент";
             IEnumerable<string> userIngridientsList = ingridientsSearchWindow.DrawInput()!.Split(',').ToList();
-            List<Recipe>? webApiRecipes = _recipeHelper.GetRecipes(userIngridientsList);
+            webApiRecipes = _recipeHelper.GetRecipes(userIngridientsList);
             var foundRecipes = webApiRecipes
                 .Where(r => r.UsedIngredients.Exists(i => userIngridientsList.Contains(i.Name))).ToList();
             choice = RecipesSystem(foundRecipes);
@@ -88,7 +88,27 @@ public class AppUI
         errorWindow.Body = ex.Message;
     }
     
-    //TODO: Сделать реализацию системы избранных рецептов и отправку в ДБ
+    public List<Recipe> FavoriteAddMenu()
+    {
+        Tui favouriteMenuWindow = new Tui();
+        favouriteMenuWindow.Title = "Добавление рецептов в список избранных";
+        favouriteMenuWindow.Body = "*SPACE* выбор рецепта \n *ENTER* подтвердить";
+        List<Tui.CheckBoxOption> options = new List<Tui.CheckBoxOption>(); 
+        foreach (var recipe in webApiRecipes)
+        {
+            options.Add(
+                new Tui.CheckBoxOption()
+                {
+                    IsSelected = false,
+                    Name = recipe.Title,
+                }
+            );
+        }
 
+        List<Tui.CheckBoxOption> selectedRecipes = favouriteMenuWindow.DrawCheckBox(options);
+        List<string> selectedRecipesNames = selectedRecipes.Select(r => r.Name).ToList();
+        List<Recipe> resultRecipes = webApiRecipes.Where(r => selectedRecipesNames.Any(n => r.Title == n)).ToList();
+        return resultRecipes;
+    }
     #endregion
 }
