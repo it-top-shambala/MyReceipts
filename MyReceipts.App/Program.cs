@@ -1,7 +1,7 @@
 ﻿using MyReceipts.App;
 
 var app = new AppUI();
-DataBaseWorker DBWorker = new DataBaseWorker();
+var dbWorker = new DataBaseWorker();
 app.StartMenu();
 var userChoice = app.ChoiceMenu();
 while (userChoice != "2. Выход")
@@ -11,7 +11,7 @@ while (userChoice != "2. Выход")
         case "1. Поиск рецепта по ингредиентам":
             app.SearchByIngridients();
             var favouriteRecipes = app.FavoriteAddMenu();
-            DBWorker.SaveFavoriteRecipes(favouriteRecipes);
+            dbWorker.SaveFavoriteRecipes(favouriteRecipes);
             break;
         case "2. Выход":
             break;

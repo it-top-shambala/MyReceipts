@@ -40,8 +40,10 @@ public class AppUI
         {
             Tui ingridientsSearchWindow = new Tui();
             ingridientsSearchWindow.Title = "Поиск по ингредиентам";
-            ingridientsSearchWindow.Body = "Введите ингредиент";
-            IEnumerable<string> userIngridientsList = ingridientsSearchWindow.DrawInput()!.Split(',').ToList();
+            ingridientsSearchWindow.Body = "Введите ингредиенты";
+            IEnumerable<string> userIngridientsList = ingridientsSearchWindow.DrawInput()!.Split(',', ' ', ';',Convert.ToChar(", "), '.').ToList();
+            var filteredUserIngridientsList = userIngridientsList.Where(item => item != "").ToList();
+            userIngridientsList = filteredUserIngridientsList;
             webApiRecipes = _recipeHelper.GetRecipes(userIngridientsList);
             var foundRecipes = webApiRecipes
                 .Where(r => r.UsedIngredients.Exists(i => userIngridientsList.Contains(i.Name))).ToList();
