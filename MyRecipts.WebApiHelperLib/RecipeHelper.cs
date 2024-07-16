@@ -5,6 +5,9 @@ using System.Text.Json;
 
 namespace FoodApi;
 
+/// <summary>
+/// 
+/// </summary>
 public class RecipeHelper
 {
     private HttpHelper _httpHelper;
@@ -12,6 +15,9 @@ public class RecipeHelper
     private const string PATH_CFG = "Configs\\ConfigRecipeHelper.json";
     private ConfigRecipeHepler _config;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public RecipeHelper()
     {
         InitConfig();
@@ -19,6 +25,11 @@ public class RecipeHelper
         _logger = new LogToFile(_config.PathToLogger);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ingredients"></param>
+    /// <returns></returns>
     public List<Recipe>? GetRecipes(IEnumerable<string> ingredients)
     {
         try
@@ -34,6 +45,12 @@ public class RecipeHelper
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ingredients"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
     private string GetResponseJsonFromHttpCLient(IEnumerable<string> ingredients)
     {
         var requestUri = CreateRequiestUri(ingredients);
@@ -44,6 +61,11 @@ public class RecipeHelper
         return jsonString;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ingredients"></param>
+    /// <returns></returns>
     private string CreateRequiestUri(IEnumerable<string> ingredients)
     {
         var ingredietsForm = String.Join(_config.Connector, ingredients);
@@ -51,6 +73,10 @@ public class RecipeHelper
         return $"{_config.RawRequestUri}{_config.ApiKeyConnector}{_config.ApiKey}{_config.IngredientsConnector}{ingredietsForm}";
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <exception cref="InitConfigException"></exception>
     private void InitConfig()
     {
         try

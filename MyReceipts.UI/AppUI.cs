@@ -6,12 +6,19 @@ public class AppUI
 {
     #region Props
 
+    /// <summary>
+    /// 
+    /// </summary>
+
     private static RecipeHelper _recipeHelper;
 
     #endregion
 
     #region Methods
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void StartMenu()
     {
         Tui startWindow = new Tui();
@@ -20,6 +27,10 @@ public class AppUI
         startWindow.DrawOk();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public string ChoiceMenu()
     {
         Tui choiceWindow = new Tui();
@@ -33,6 +44,9 @@ public class AppUI
         return choice;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void SearchByIngridients()
     {
         bool choice = true;
@@ -49,11 +63,21 @@ public class AppUI
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="recipes"></param>
+    /// <returns></returns>
     private bool RecipesSystem(List<Recipe> recipes)
     {
         return FoundRecipesWindow(recipes);
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="recipes"></param>
+    /// <returns></returns>
     private bool FoundRecipesWindow(List<Recipe> recipes) 
     {
         Tui recipesWindow = new Tui();
@@ -64,6 +88,11 @@ public class AppUI
         return ShowRecipeWindow(recipe);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="recipe"></param>
+    /// <returns></returns>
     private bool ShowRecipeWindow(Recipe recipe)
     {
         Tui recipeWindow = new Tui();
@@ -74,6 +103,11 @@ public class AppUI
         return recipeWindow.DrawYesNo();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="recipe"></param>
+    /// <returns></returns>
     private string ShowIngridients(Recipe recipe)
     {
         string result = string.Join(", ", recipe.UsedIngredients.Select(i => i.Name));
@@ -81,6 +115,10 @@ public class AppUI
         return result;
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ex"></param>
     private static void ErrorWindow(Exception ex)
     {
         Tui errorWindow = new Tui();

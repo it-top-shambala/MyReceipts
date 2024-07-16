@@ -3,9 +3,14 @@
 namespace MyReceipts.App;
 
 [Table("table_ingredients")]
+
 public class IngredientUI
 {
     private const int ZERO = 0;
+
+    /// <summary>
+    /// 
+    /// </summary>
 
     [Column("id")] 
     public int Id { get; init; }
@@ -24,6 +29,8 @@ public class IngredientUI
     [Column("recipe_id")] 
     public int RecipeId { get; set; }
 
-
+/// <summary>
+/// 
+/// </summary>
     public List<RecipeUI>? Recipes { get; set; }
 }
