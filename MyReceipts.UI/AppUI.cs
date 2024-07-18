@@ -6,9 +6,10 @@ public class AppUI
 {
     #region Props
 
-    private static RecipeHelper _recipeHelper;
+    private static RecipeHelper _recipeHelper = new();
     private List<Recipe>? webApiRecipes;
-    #endregion
+
+    #endregion Props
 
     #region Methods
 
@@ -28,14 +29,14 @@ public class AppUI
         string choice = choiceWindow.DrawList(new List<string>()
         {
             "1. Поиск рецепта по ингредиентам",
-            "2. Выход" 
+            "2. Выход"
         });
         return choice;
     }
 
-    public void SearchByIngridients()
+    public bool? SearchByIngridients()
     {
-        bool choice = true;
+        bool? choice = true;
         while (choice != false)
         {
             Tui ingridientsSearchWindow = new Tui();
@@ -48,22 +49,35 @@ public class AppUI
             var foundRecipes = webApiRecipes
                 .Where(r => r.UsedIngredients.Exists(i => userIngridientsList.Contains(i.Name))).ToList();
             choice = RecipesSystem(foundRecipes);
+
+            if (choice == null)
+                return null;
         }
+        return choice;
     }
 
-    private bool RecipesSystem(List<Recipe> recipes)
+    private bool? RecipesSystem(List<Recipe> recipes)
     {
         return FoundRecipesWindow(recipes);
     }
-    
-    private bool FoundRecipesWindow(List<Recipe> recipes) 
+
+    private bool? FoundRecipesWindow(List<Recipe> recipes)
     {
         Tui recipesWindow = new Tui();
         recipesWindow.Title = "Найденные рецепты";
         recipesWindow.Body = "Рецепты: ";
-        var choice = recipesWindow.DrawList(recipes.Select<Recipe, string>(r => r.Title).ToList());
-        var recipe = recipes.First(r => r.Title == choice); 
-        return ShowRecipeWindow(recipe);
+        if (recipes != null && recipes.Count > 0)
+        {
+            var choice = recipesWindow.DrawList(recipes.Select<Recipe, string>(r => r.Title).ToList());
+            var recipe = recipes.First(r => r.Title == choice);
+            return ShowRecipeWindow(recipe);
+        }
+        else
+        {
+            recipesWindow.Body = "Ничего не найдено";
+            recipesWindow.DrawOk();
+            return null;
+        }
     }
 
     private bool ShowRecipeWindow(Recipe recipe)
@@ -79,23 +93,24 @@ public class AppUI
     private string ShowIngridients(Recipe recipe)
     {
         string result = string.Join(", ", recipe.UsedIngredients.Select(i => i.Name));
+        result += ", " + string.Join(", ", recipe.MissedIngredients.Select(i => i.Name));
 
         return result;
     }
-    
+
     private static void ErrorWindow(Exception ex)
     {
         Tui errorWindow = new Tui();
         errorWindow.Title = "Ошибка";
         errorWindow.Body = ex.Message;
     }
-    
+
     public List<Recipe> FavoriteAddMenu()
     {
         Tui favouriteMenuWindow = new Tui();
         favouriteMenuWindow.Title = "Добавление рецептов в список избранных";
         favouriteMenuWindow.Body = "*SPACE* выбор рецепта \n *ENTER* подтвердить";
-        List<Tui.CheckBoxOption> options = new List<Tui.CheckBoxOption>(); 
+        List<Tui.CheckBoxOption> options = new List<Tui.CheckBoxOption>();
         foreach (var recipe in webApiRecipes)
         {
             options.Add(
@@ -112,5 +127,6 @@ public class AppUI
         List<Recipe> resultRecipes = webApiRecipes.Where(r => selectedRecipesNames.Any(n => r.Title == n)).ToList();
         return resultRecipes;
     }
-    #endregion
+
+    #endregion Methods
 }
