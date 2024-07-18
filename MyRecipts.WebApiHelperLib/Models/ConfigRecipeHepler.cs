@@ -1,7 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
 namespace MyRecipts.WebApiHelperLib.Models;
-
+/// <summary>
+/// Класс описывающий сущность конфига для RecipeHepler
+/// </summary>
 public class ConfigRecipeHepler
 {
     [JsonPropertyName("apiKey")]

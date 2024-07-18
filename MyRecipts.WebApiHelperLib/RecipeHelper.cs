@@ -6,7 +6,7 @@ using System.Text.Json;
 namespace FoodApi;
 
 /// <summary>
-/// 
+/// Представляет класс для работы с вебапи
 /// </summary>
 public class RecipeHelper
 {
@@ -15,9 +15,6 @@ public class RecipeHelper
     private const string PATH_CFG = "Configs\\ConfigRecipeHelper.json";
     private ConfigRecipeHepler _config;
 
-    /// <summary>
-    /// 
-    /// </summary>
     public RecipeHelper()
     {
         InitConfig();
@@ -26,10 +23,10 @@ public class RecipeHelper
     }
 
     /// <summary>
-    /// 
+    /// Десериализация ответа от вебапи
     /// </summary>
     /// <param name="ingredients"></param>
-    /// <returns></returns>
+    /// <returns>список рецептов</returns>
     public List<Recipe>? GetRecipes(IEnumerable<string> ingredients)
     {
         try
@@ -46,10 +43,10 @@ public class RecipeHelper
     }
 
     /// <summary>
-    /// 
+    /// Получение ответа от вебапи в виде jsonstring
     /// </summary>
     /// <param name="ingredients"></param>
-    /// <returns></returns>
+    /// <returns>ответ от вебапи</returns>
     /// <exception cref="ArgumentNullException"></exception>
     private string GetResponseJsonFromHttpCLient(IEnumerable<string> ingredients)
     {
@@ -62,10 +59,10 @@ public class RecipeHelper
     }
 
     /// <summary>
-    /// 
+    /// Формирование строки запроса для вебапи
     /// </summary>
     /// <param name="ingredients"></param>
-    /// <returns></returns>
+    /// <returns>сформированную строку</returns>
     private string CreateRequiestUri(IEnumerable<string> ingredients)
     {
         var ingredietsForm = String.Join(_config.Connector, ingredients);
@@ -74,7 +71,7 @@ public class RecipeHelper
     }
 
     /// <summary>
-    /// 
+    /// Метод для получения данных из конфига и их десериализации
     /// </summary>
     /// <exception cref="InitConfigException"></exception>
     private void InitConfig()
