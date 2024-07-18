@@ -46,9 +46,10 @@ public class AppUI
             var filteredUserIngridientsList = userIngridientsList.Where(item => item != "").ToList();
             userIngridientsList = filteredUserIngridientsList;
             webApiRecipes = _recipeHelper.GetRecipes(userIngridientsList);
-            var foundRecipes = webApiRecipes
+            var foundRecipes = webApiRecipes //FIX ME
                 .Where(r => r.UsedIngredients.Exists(i => userIngridientsList.Contains(i.Name))).ToList();
-            choice = RecipesSystem(foundRecipes);
+            //choice = RecipesSystem(foundRecipes);
+            choice = FoundRecipesWindow(foundRecipes);
 
             if (choice == null)
                 return null;
@@ -56,7 +57,7 @@ public class AppUI
         return choice;
     }
 
-    private bool? RecipesSystem(List<Recipe> recipes)
+    private bool? RecipesSystem(List<Recipe> recipes) //FIX ME
     {
         return FoundRecipesWindow(recipes);
     }
@@ -90,7 +91,7 @@ public class AppUI
         return recipeWindow.DrawYesNo();
     }
 
-    private string ShowIngridients(Recipe recipe)
+    private string ShowIngridients(Recipe recipe) //FIX ME Переименовать название метода
     {
         string result = string.Join(", ", recipe.UsedIngredients.Select(i => i.Name));
         result += ", " + string.Join(", ", recipe.MissedIngredients.Select(i => i.Name));
@@ -105,7 +106,7 @@ public class AppUI
         errorWindow.Body = ex.Message;
     }
 
-    public List<Recipe> FavoriteAddMenu()
+    public List<Recipe> FavoriteAddMenu() //FIX ME Метод должен получать список для вывода
     {
         Tui favouriteMenuWindow = new Tui();
         favouriteMenuWindow.Title = "Добавление рецептов в список избранных";
