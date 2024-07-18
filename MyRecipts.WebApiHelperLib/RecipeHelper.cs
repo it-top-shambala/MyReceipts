@@ -11,7 +11,6 @@ public class RecipeHelper
     private LogToFile _logger;
     private const string PATH_CFG = "Configs\\ConfigRecipeHelper.json";
     private ConfigRecipeHepler _config;
-
     public RecipeHelper()
     {
         InitConfig();
