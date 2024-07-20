@@ -1,9 +1,11 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35004.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyReceipts.App", "MyReceipts.App\MyReceipts.App.csproj", "{5F6E19F1-1205-434B-9D06-1D43250297AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyReceipts.UI", "MyReceipts.UI\MyReceipts.UI.csproj", "{7342FB0E-7954-490E-AFDE-DABA1EEC1F45}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyRecipts.WebApiHelperLib", "MyRecipts.WebApiHelperLib\MyRecipts.WebApiHelperLib.csproj", "{511316A9-B382-40C6-A36C-844B8F0D2EB8}"
 EndProject
@@ -17,6 +19,10 @@ Global
 		{5F6E19F1-1205-434B-9D06-1D43250297AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F6E19F1-1205-434B-9D06-1D43250297AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F6E19F1-1205-434B-9D06-1D43250297AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7342FB0E-7954-490E-AFDE-DABA1EEC1F45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7342FB0E-7954-490E-AFDE-DABA1EEC1F45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7342FB0E-7954-490E-AFDE-DABA1EEC1F45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7342FB0E-7954-490E-AFDE-DABA1EEC1F45}.Release|Any CPU.Build.0 = Release|Any CPU
 		{511316A9-B382-40C6-A36C-844B8F0D2EB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{511316A9-B382-40C6-A36C-844B8F0D2EB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{511316A9-B382-40C6-A36C-844B8F0D2EB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
