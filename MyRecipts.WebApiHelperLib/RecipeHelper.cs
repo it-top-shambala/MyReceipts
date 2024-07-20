@@ -1,6 +1,7 @@
 ﻿using Logger.File;
 using MyRecipts.WebApiHelperLib.Exceptions;
 using MyRecipts.WebApiHelperLib.Models;
+using NewApiTest.models;
 using System.Text.Json;
 
 namespace FoodApi;
@@ -17,6 +18,48 @@ public class RecipeHelper
         InitConfig();
         _httpHelper = new HttpHelper(_config.BaseUri);
         _logger = new LogToFile(_config.PathToLogger);
+    }
+
+    public List<Instruction?> GetInstructions(List<Recipe> recipes)
+    {
+        var jsonStrings = GetInstructionForEachRecipe(recipes);
+        var res = new List<Instruction?>();
+
+        foreach (var item in jsonStrings)
+        {
+            try
+            {
+                if (String.IsNullOrWhiteSpace(item))
+                    continue;
+
+                var instruction = JsonSerializer.Deserialize<List<Instruction>>(item);
+
+                res.Add(instruction?[0]);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Ошибка при десиреализации {typeof(Instruction)}: {ex.Message}");
+                res.Add(null);
+            }
+        }
+        return res;
+    }
+
+    public List<string> GetInstructionForEachRecipe(List<Recipe> recipes)
+    {
+        var res = new List<string>();
+
+        foreach (var item in recipes)
+        {
+            res.Add(GetInstructionForRecipe(item.Id));
+        }
+
+        return res;
+    }
+
+    public string GetInstructionForRecipe(int id)
+    {
+        return _httpHelper.GetResponseBody($"/recipes/{id}/analyzedInstructions{_config.ApiKeyConnector}{_config.ApiKey}");
     }
 
     public List<Recipe>? GetRecipes(IEnumerable<string> ingredients)
@@ -36,7 +79,7 @@ public class RecipeHelper
 
     private string GetResponseJsonFromHttpCLient(IEnumerable<string> ingredients)
     {
-        var requestUri = CreateRequiestUri(ingredients);
+        var requestUri = CreateRequiestUriForRecipe(ingredients);
         var jsonString = _httpHelper.GetResponseBody(requestUri);
         if (String.IsNullOrEmpty(jsonString))
             throw new ArgumentNullException(nameof(jsonString));
@@ -44,7 +87,7 @@ public class RecipeHelper
         return jsonString;
     }
 
-    private string CreateRequiestUri(IEnumerable<string> ingredients)
+    private string CreateRequiestUriForRecipe(IEnumerable<string> ingredients)
     {
         var ingredietsForm = String.Join(_config.Connector, ingredients);
 
