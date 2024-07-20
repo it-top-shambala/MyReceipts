@@ -1,5 +1,6 @@
 using FoodApi;
 using MyRecipts.WebApiHelperLib.Models;
+using NewApiTest.models;
 using tui_netcore;
 
 namespace MyReceipts.UI;
@@ -9,6 +10,7 @@ public class AppUI
     #region Props
 
     private static RecipeHelper _recipeHelper = new();
+    private Dictionary<Recipe, Instruction> _recipes;
 
     #endregion Props
 
@@ -49,9 +51,7 @@ public class AppUI
             var filteredUserIngridientsList = userIngridientsList.Where(item => item != "").ToList();
             userIngridientsList = filteredUserIngridientsList;
             recipes = _recipeHelper.GetRecipes(userIngridientsList);
-            var foundRecipes = recipes
-                .Where(r => r.UsedIngredients.Exists(i => userIngridientsList.Contains(i.Name))).ToList();
-            choice = FoundRecipesWindow(foundRecipes);
+            choice = FoundRecipesWindow(recipes);
 
             if (choice == null)
                 return null;
@@ -79,14 +79,14 @@ public class AppUI
         }
     }
 
-    private bool ShowRecipeWindow(Recipe recipe)
+    private void ShowRecipeWindow(Recipe recipe)
     {
         Tui recipeWindow = new Tui();
         recipeWindow.Title = "Рецепт";
         recipeWindow.Body = $"\n\tНазвание: {recipe.Title}\n" +
                             $"\tИнгредиенты: {ShowRecipeIngridients(recipe)}\n" +
-                            $"\tВернуться на экран рецептов?";
-        return recipeWindow.DrawYesNo();
+                            $"\tДля показа шагов приготовления нажмите любую клавишу\n";
+                            recipeWindow.DrawOk();
     }
 
     private string ShowRecipeIngridients(Recipe recipe) //FIX ME Переименовать название метода (Done)
