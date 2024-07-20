@@ -1,4 +1,3 @@
-using System.Text;
 using FoodApi;
 using MyRecipts.WebApiHelperLib.Models;
 using NewApiTest.models;
@@ -11,7 +10,7 @@ public class AppUI
     #region Props
 
     private static RecipeHelper _recipeHelper = new();
-    private Dictionary<Recipe, Instruction> _recipes;
+    private Dictionary<Recipe, Instruction> _recipesWithInstructions;
 
     #endregion Props
 
@@ -52,6 +51,7 @@ public class AppUI
             var filteredUserIngridientsList = userIngridientsList.Where(item => item != "").ToList();
             userIngridientsList = filteredUserIngridientsList;
             recipes = _recipeHelper.GetRecipes(userIngridientsList);
+            _recipesWithInstructions = _recipeHelper.GetRecipeWithInstruction(userIngridientsList);
             choice = FoundRecipesWindow(recipes);
 
             if (choice == null)
@@ -70,7 +70,8 @@ public class AppUI
         {
             var choice = recipesWindow.DrawList(recipes.Select<Recipe, string>(r => r.Title).ToList());
             var recipe = recipes.First(r => r.Title == choice);
-            return ShowRecipeWindow(recipe);
+            ShowRecipeWindow(recipe);
+            return ShowRecipeStepsWindow(recipe);
         }
         else
         {
@@ -90,22 +91,29 @@ public class AppUI
                             recipeWindow.DrawOk();
     }
 
-    private bool ShowRecipeStepsWindow(Recipe recipe, Dictionary<Recipe, Instruction> recipes)
+    private bool ShowRecipeStepsWindow(Recipe recipe)
     {
         Tui recipeStepsWindow = new Tui();
         recipeStepsWindow.Title = "Шаги приготовления";
-        recipeStepsWindow.Body = $"";
+        recipeStepsWindow.Body = $"{ShowInstructions(recipe, _recipesWithInstructions)} +" +
+                                 $"Добавить рецепт в избранное?";
+        return recipeStepsWindow.DrawYesNo();
     }
 
-    private void ShowInstructions(Recipe recipe)
+    private string ShowInstructions(Recipe recipe, Dictionary<Recipe, Instruction> recipes)
     {
-        foreach (var item in _recipes)
+        string result = "";
+        foreach (var item in recipes)
         {
-            
-            
+            if (item.Key == recipe)
+            {
+                result = string.Join("\n", item.Value.Steps.Select(s => s.Number) + " - " + item.Value.Steps.Select(s => s.StepDiscription));
+            }
         }
+
+        return result;
     }
-    private string ShowRecipeIngridients(Recipe recipe) //FIX ME Переименовать название метода (Done)
+    private string ShowRecipeIngridients(Recipe recipe)
     {
         string result = string.Join(", ", recipe.UsedIngredients.Select(i => i.Name));
         result += ", " + string.Join(", ", recipe.MissedIngredients.Select(i => i.Name));
@@ -113,7 +121,7 @@ public class AppUI
         return result;
     }
 
-    public List<Recipe> FavoriteAddMenu(List<Recipe> recipes) //FIX ME Метод должен получать список для вывода (done)
+    public List<Recipe> FavoriteAddMenu(List<Recipe> recipes)
     {
         Tui favouriteMenuWindow = new Tui();
         favouriteMenuWindow.Title = "Добавление рецептов в список избранных";

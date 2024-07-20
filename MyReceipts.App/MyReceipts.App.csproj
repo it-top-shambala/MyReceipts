@@ -13,12 +13,13 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.6" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\MyReceipts.UI\MyReceipts.UI.csproj" />
         <ProjectReference Include="..\MyRecipts.WebApiHelperLib\MyRecipts.WebApiHelperLib.csproj" />
+        <ProjectReference Include="..\MyRecipes.DBHelper\MyRecipes.DBHelper.csproj" />
     </ItemGroup>
 
 </Project>

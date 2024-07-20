@@ -5,7 +5,7 @@ using MyRecipts.WebApiHelperLib.Models;
 
 namespace MyReceipts.App
 {
-    internal  class DataBaseWorker
+    public class DataBaseWorker
     {
         private LogToFile _logger = new LogToFile();
 
