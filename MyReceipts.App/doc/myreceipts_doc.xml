@@ -4,5 +4,77 @@
         <name>MyReceipts.App</name>
     </assembly>
     <members>
+        <member name="T:MyReceipts.App.DataBaseWorker">
+            <summary>
+            Класс который работает непосредственно  с БД и выполняет преобразование классов 
+            </summary>
+        </member>
+        <member name="M:MyReceipts.App.DataBaseWorker.SaveFavoriteRecipes(System.Collections.Generic.List{MyRecipts.WebApiHelperLib.Models.Recipe})">
+            <summary>
+            Приводит в действие алгоритм по вызову методов класса для преобразования
+            и сохранение понравившихся рецептов
+            </summary>
+            <param name="recipes">
+            Перечислитель рецептов которые получены с интернета
+            </param>
+        </member>
+        <member name="M:MyReceipts.App.DataBaseWorker.Recipe1ConvertRecipe(MyRecipts.WebApiHelperLib.Models.Recipe)">
+            <summary>
+            Преобразование классов Recipe в RecipeUI и инициализация списка ингредиентов
+            </summary>
+            <param name="recipe1">
+            Исходный класс для метода
+            </param>
+            <returns>
+            Возвращает итог преобразования. Класс для соохранения в БД
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            Генерация исключения в результате пустого исходного класса(параметра метода)
+            </exception>
+        </member>
+        <member name="M:MyReceipts.App.DataBaseWorker.FusionIngredientsToMissed(MyRecipts.WebApiHelperLib.Models.MissedIngredient)">
+            <summary>
+            Преобразование пропущенного ингредиента-webApi в класс пропущенного ингредиента-БД
+            </summary>
+            <param name="ingredientFromWebApi">
+            пропущенный ингредиент  от webApi 
+            </param>
+            <returns>
+            Итог преобразования пропущенного ингредиента для БД
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            Генерация исключения в результате пустого исходного класса(параметра метода)
+            </exception>
+        </member>
+        <member name="M:MyReceipts.App.DataBaseWorker.FusionIngredientsToUsed(MyRecipts.WebApiHelperLib.Models.UsedIngredient)">
+            <summary>
+            Преобразование используемого ингредиента-webApi в класс используемого ингредиента-БД
+            </summary>
+            <param name="ingredientFromWebApi">
+            Используемый ингредиент от webApi
+            </param>
+            <returns>
+            Итог преобразования используемого ингредиента для БД
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            Генерация исключения в результате пустого исходного класса(параметра метода)
+            </exception>
+        </member>
+        <member name="M:MyReceipts.App.DataBaseWorker.GetRecipes">
+            <summary>
+            Получение всех рецептов которые хранятся в БД с загрузкой связных данных
+            </summary>
+            <returns>
+            Последовательность классов из БД реализующая интерфейс  
+            </returns>
+        </member>
+        <member name="M:MyReceipts.App.DataBaseWorker.SaveToDb(System.Collections.Generic.List{MyReceipts.App.RecipeUI})">
+            <summary>
+            Логика сохранения рецептов в БД с обновлением
+            </summary>
+            <param name="recipes">
+            Лист классов RecipeUI которые нужно сохранить в БД 
+            </param>
+        </member>
     </members>
 </doc>
