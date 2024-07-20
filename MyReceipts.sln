@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyReceipts.UI", "MyReceipts
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyRecipts.WebApiHelperLib", "MyRecipts.WebApiHelperLib\MyRecipts.WebApiHelperLib.csproj", "{511316A9-B382-40C6-A36C-844B8F0D2EB8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyRecipes.DBHelper", "MyRecipes.DBHelper\MyRecipes.DBHelper.csproj", "{BFCFE58D-9CD5-4AFB-A2B2-060D1AE74D7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{511316A9-B382-40C6-A36C-844B8F0D2EB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{511316A9-B382-40C6-A36C-844B8F0D2EB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{511316A9-B382-40C6-A36C-844B8F0D2EB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFCFE58D-9CD5-4AFB-A2B2-060D1AE74D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFCFE58D-9CD5-4AFB-A2B2-060D1AE74D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFCFE58D-9CD5-4AFB-A2B2-060D1AE74D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFCFE58D-9CD5-4AFB-A2B2-060D1AE74D7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
