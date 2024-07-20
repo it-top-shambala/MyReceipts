@@ -20,46 +20,43 @@ public class RecipeHelper
         _logger = new LogToFile(_config.PathToLogger);
     }
 
-    public List<Instruction?> GetInstructions(List<Recipe> recipes)
+    public Dictionary<Recipe, Instruction?>? GetRecipeWithInstruction(IEnumerable<string> ingredients)
     {
-        var jsonStrings = GetInstructionForEachRecipe(recipes);
-        var res = new List<Instruction?>();
+        var res = new Dictionary<Recipe, Instruction?>();
 
-        foreach (var item in jsonStrings)
-        {
-            try
-            {
-                if (String.IsNullOrWhiteSpace(item))
-                    continue;
-
-                var instruction = JsonSerializer.Deserialize<List<Instruction>>(item);
-
-                res.Add(instruction?[0]);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error($"Ошибка при десиреализации {typeof(Instruction)}: {ex.Message}");
-                res.Add(null);
-            }
-        }
-        return res;
-    }
-
-    public List<string> GetInstructionForEachRecipe(List<Recipe> recipes)
-    {
-        var res = new List<string>();
+        var recipes = GetRecipes(ingredients);
+        if (recipes is null)
+            return null;
 
         foreach (var item in recipes)
         {
-            res.Add(GetInstructionForRecipe(item.Id));
+            var value = GetInstruction(item);
+            res.Add(item, value);
         }
-
         return res;
     }
 
-    public string GetInstructionForRecipe(int id)
+    public Instruction? GetInstruction(Recipe recipe)
     {
-        return _httpHelper.GetResponseBody($"/recipes/{id}/analyzedInstructions{_config.ApiKeyConnector}{_config.ApiKey}");
+        var jsonStrings = GetInstructionForRecipe(recipe.Id);
+        var res = new Instruction();
+
+        try
+        {
+            if (String.IsNullOrWhiteSpace(jsonStrings))
+                return null;
+
+            var instruction = JsonSerializer.Deserialize<List<Instruction>>(jsonStrings);
+
+            res = instruction?[0];
+        }
+        catch (Exception ex)
+        {
+            _logger.Error($"Ошибка при десиреализации {typeof(Instruction)}: {ex.Message}");
+            res = null;
+        }
+
+        return res;
     }
 
     public List<Recipe>? GetRecipes(IEnumerable<string> ingredients)
@@ -75,6 +72,11 @@ public class RecipeHelper
             _logger.Error($"Ошибка при десиреализации {typeof(Recipe)}: {ex.Message}");
             return null;
         }
+    }
+
+    private string GetInstructionForRecipe(int id)
+    {
+        return _httpHelper.GetResponseBody($"/recipes/{id}/analyzedInstructions{_config.ApiKeyConnector}{_config.ApiKey}");
     }
 
     private string GetResponseJsonFromHttpCLient(IEnumerable<string> ingredients)
