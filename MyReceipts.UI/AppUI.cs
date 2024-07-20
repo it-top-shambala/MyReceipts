@@ -1,3 +1,4 @@
+using System.Text;
 using FoodApi;
 using MyRecipts.WebApiHelperLib.Models;
 using NewApiTest.models;
@@ -89,6 +90,21 @@ public class AppUI
                             recipeWindow.DrawOk();
     }
 
+    private bool ShowRecipeStepsWindow(Recipe recipe, Dictionary<Recipe, Instruction> recipes)
+    {
+        Tui recipeStepsWindow = new Tui();
+        recipeStepsWindow.Title = "Шаги приготовления";
+        recipeStepsWindow.Body = $"";
+    }
+
+    private void ShowInstructions(Recipe recipe)
+    {
+        foreach (var item in _recipes)
+        {
+            
+            
+        }
+    }
     private string ShowRecipeIngridients(Recipe recipe) //FIX ME Переименовать название метода (Done)
     {
         string result = string.Join(", ", recipe.UsedIngredients.Select(i => i.Name));
