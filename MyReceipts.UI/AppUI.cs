@@ -9,7 +9,6 @@ public class AppUI
     #region Props
 
     private static RecipeHelper _recipeHelper = new();
-    private List<Recipe>? webApiRecipes;
 
     #endregion Props
 
@@ -28,6 +27,7 @@ public class AppUI
         Tui choiceWindow = new Tui();
         choiceWindow.Title = "Меню";
         choiceWindow.Body = "Выберите что вы хотите сделать";
+        
         string choice = choiceWindow.DrawList(new List<string>()
         {
             "1. Поиск рецепта по ингредиентам",
@@ -36,7 +36,7 @@ public class AppUI
         return choice;
     }
 
-    public bool? SearchByIngridients()
+    public bool? SearchByIngridients(List<Recipe> recipes)
     {
         bool? choice = true;
         while (choice != false)
@@ -44,13 +44,13 @@ public class AppUI
             Tui ingridientsSearchWindow = new Tui();
             ingridientsSearchWindow.Title = "Поиск по ингредиентам";
             ingridientsSearchWindow.Body = "Введите ингредиенты";
+            
             IEnumerable<string> userIngridientsList = ingridientsSearchWindow.DrawInput()!.Split(',', ' ', ';',Convert.ToChar(", "), '.').ToList();
             var filteredUserIngridientsList = userIngridientsList.Where(item => item != "").ToList();
             userIngridientsList = filteredUserIngridientsList;
-            webApiRecipes = _recipeHelper.GetRecipes(userIngridientsList);
-            var foundRecipes = webApiRecipes //FIX ME
+            recipes = _recipeHelper.GetRecipes(userIngridientsList);
+            var foundRecipes = recipes
                 .Where(r => r.UsedIngredients.Exists(i => userIngridientsList.Contains(i.Name))).ToList();
-            //choice = RecipesSystem(foundRecipes);
             choice = FoundRecipesWindow(foundRecipes);
 
             if (choice == null)
@@ -58,17 +58,13 @@ public class AppUI
         }
         return choice;
     }
-
-    private bool? RecipesSystem(List<Recipe> recipes) //FIX ME
-    {
-        return FoundRecipesWindow(recipes);
-    }
-
+    
     private bool? FoundRecipesWindow(List<Recipe> recipes)
     {
         Tui recipesWindow = new Tui();
         recipesWindow.Title = "Найденные рецепты";
         recipesWindow.Body = "Рецепты: ";
+        
         if (recipes != null && recipes.Count > 0)
         {
             var choice = recipesWindow.DrawList(recipes.Select<Recipe, string>(r => r.Title).ToList());
@@ -88,12 +84,12 @@ public class AppUI
         Tui recipeWindow = new Tui();
         recipeWindow.Title = "Рецепт";
         recipeWindow.Body = $"\n\tНазвание: {recipe.Title}\n" +
-                            $"\tИнгредиенты: {ShowIngridients(recipe)}\n" +
+                            $"\tИнгредиенты: {ShowRecipeIngridients(recipe)}\n" +
                             $"\tВернуться на экран рецептов?";
         return recipeWindow.DrawYesNo();
     }
 
-    private string ShowIngridients(Recipe recipe) //FIX ME Переименовать название метода
+    private string ShowRecipeIngridients(Recipe recipe) //FIX ME Переименовать название метода (Done)
     {
         string result = string.Join(", ", recipe.UsedIngredients.Select(i => i.Name));
         result += ", " + string.Join(", ", recipe.MissedIngredients.Select(i => i.Name));
@@ -101,20 +97,13 @@ public class AppUI
         return result;
     }
 
-    private static void ErrorWindow(Exception ex)
-    {
-        Tui errorWindow = new Tui();
-        errorWindow.Title = "Ошибка";
-        errorWindow.Body = ex.Message;
-    }
-
-    public List<Recipe> FavoriteAddMenu() //FIX ME Метод должен получать список для вывода
+    public List<Recipe> FavoriteAddMenu(List<Recipe> recipes) //FIX ME Метод должен получать список для вывода (done)
     {
         Tui favouriteMenuWindow = new Tui();
         favouriteMenuWindow.Title = "Добавление рецептов в список избранных";
         favouriteMenuWindow.Body = "*SPACE* выбор рецепта \n *ENTER* подтвердить";
         List<Tui.CheckBoxOption> options = new List<Tui.CheckBoxOption>();
-        foreach (var recipe in webApiRecipes)
+        foreach (var recipe in recipes)
         {
             options.Add(
                 new Tui.CheckBoxOption()
@@ -127,7 +116,7 @@ public class AppUI
 
         List<Tui.CheckBoxOption> selectedRecipes = favouriteMenuWindow.DrawCheckBox(options);
         List<string> selectedRecipesNames = selectedRecipes.Select(r => r.Name).ToList();
-        List<Recipe> resultRecipes = _webApiRecipes.Where(r => selectedRecipesNames.Any(n => r.Title == n)).ToList();
+        List<Recipe> resultRecipes = recipes.Where(r => selectedRecipesNames.Any(n => r.Title == n)).ToList();
         return resultRecipes;
     }
 
