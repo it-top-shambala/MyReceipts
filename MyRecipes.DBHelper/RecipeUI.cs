@@ -19,4 +19,5 @@ public class RecipeUI
     public int IngredientId { get; set; }
 
     public List<IngredientUI>? Ingredients { get; set; }
+
 }
