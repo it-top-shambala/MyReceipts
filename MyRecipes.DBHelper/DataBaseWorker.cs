@@ -5,9 +5,17 @@ using MyRecipts.WebApiHelperLib.Models;
 
 namespace MyReceipts.App
 {
+    /// <summary>
+    /// 
+    /// </summary>
     internal  class DataBaseWorker
     {
         private LogToFile _logger = new LogToFile();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recipes"></param>
 
         public void SaveFavoriteRecipes(List<Recipe> recipes)
         {
@@ -40,6 +48,13 @@ namespace MyReceipts.App
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recipe1"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+
         private RecipeUI Recipe1ConvertRecipe(Recipe recipe1)
         {
             if (recipe1 == null)
@@ -50,6 +65,13 @@ namespace MyReceipts.App
             recipe.Ingredients = new List<IngredientUI>();
             return recipe;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ingredientFromWebApi"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
 
         private IngredientUI FusionIngredientsToMissed(MissedIngredient ingredientFromWebApi)
         {
@@ -62,6 +84,12 @@ namespace MyReceipts.App
             return ingredient;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ingredientFromWebApi"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         private IngredientUI FusionIngredientsToUsed(UsedIngredient ingredientFromWebApi)
         {
             if (ingredientFromWebApi == null)
@@ -72,6 +100,11 @@ namespace MyReceipts.App
             ingredient.Unit = ingredientFromWebApi.Unit;
             return ingredient;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public  IEnumerable <RecipeUI> GetRecipes()
         {
             using (DBContext dbContext = new DBContext())
@@ -88,6 +121,11 @@ namespace MyReceipts.App
                 return recipes;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recipes"></param>
         private  void SaveToDb(List <RecipeUI> recipes)
         {
             if (recipes.Any() && recipes != null) {  

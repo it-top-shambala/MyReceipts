@@ -1,7 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
 namespace MyRecipts.WebApiHelperLib.Models;
-
+/// <summary>
+/// Класс описывающий сущность не использованных ингредиентов
+/// </summary>
 public class MissedIngredient
 {
     [JsonPropertyName("id")]
@@ -40,7 +42,9 @@ public class MissedIngredient
     [JsonPropertyName("extendedName")]
     public string ExtendedName { get; set; }
 }
-
+/// <summary>
+/// Класс описывающий сущность рецепта
+/// </summary>
 public class Recipe
 {
     [JsonPropertyName("id")]
@@ -73,7 +77,9 @@ public class Recipe
     [JsonPropertyName("likes")]
     public int Likes { get; set; }
 }
-
+/// <summary>
+/// Класс описывающий сущность использованных ингредиентов
+/// </summary>
 public class UsedIngredient
 {
     [JsonPropertyName("id")]

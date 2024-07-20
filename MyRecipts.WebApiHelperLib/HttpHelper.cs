@@ -4,7 +4,9 @@ using MyRecipts.WebApiHelperLib.Models;
 using System.Text.Json;
 
 namespace FoodApi;
-
+/// <summary>
+/// Представляет класс для работы с Http клиентом
+/// </summary>
 public class HttpHelper
 {
     private HttpClient _httpClient;
@@ -21,7 +23,11 @@ public class HttpHelper
         InitConfig();
         _logger = new LogToFile(_config.PathToLogger);
     }
-
+    /// <summary>
+    /// Прочтение ответа и перевод в string
+    /// </summary>
+    /// <param name="requestUri"></param>
+    /// <returns>Тело ответа</returns>
     public string GetResponseBody(string requestUri)
     {
         var response = GetResponse(requestUri);
@@ -38,7 +44,11 @@ public class HttpHelper
             return String.Empty;
         }
     }
-
+    /// <summary>
+    /// Получение ответа от http клиента
+    /// </summary>
+    /// <param name="requiestUri"></param>
+    /// <returns>ответ от вебапи</returns>
     private HttpResponseMessage? GetResponse(string requiestUri)
     {
         try
@@ -53,7 +63,10 @@ public class HttpHelper
             return null;
         }
     }
-
+    /// <summary>
+    /// Метод для получения данных из конфига и их десериализации
+    /// </summary>
+    /// <exception cref="InitConfigException"></exception>
     private void InitConfig()
     {
         try
