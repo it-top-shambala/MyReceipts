@@ -47,7 +47,10 @@ classDiagram
     -const string PATH_CFG = "Configs\\ConfigRecipeHelper.json"
     -ConfigRecipeHepler _config
     +RecipeHelper()
+    +Dictionary<Recipe, Instruction?>? GetRecipeWithInstruction(IEnumerable<string> ingredients)
     +List<Recipe>? GetRecipes(IEnumerable<string> ingredients)
+    +Instruction? GetInstruction(Recipe recipe)
+    -string GetInstructionForRecipe(int id)
     -string GetResponseJsonFromHttpCLient(IEnumerable<string> ingredients)
     -string CreateRequiestUri(IEnumerable<string> ingredients)
     -void InitConfig()
@@ -126,9 +129,42 @@ classDiagram
     +string PathToLogger
  }
 
- ConfighttpHelper --* ConfigRecipeHepler
+ConfighttpHelper --* ConfigRecipeHepler
  MissedIngredient --> Recipe
  UsedIngredient --> Recipe
+
+ class Instruction{
+   +string Name
+   +List<Step> Steps
+ }
+class Step{
+   +int Number
+   +string StepDiscription
+   +List<Ingredient> Ingredients
+   +List<Equipment> Equipment
+   +Length Length
+}
+class Length{
+   +int Number
+   +string Unit
+}
+
+class Ingredient{
+   +int Id
+   +string Name
+   +string LocalizedName
+   +string Image
+}
+class Equipment{
+   +int Id
+   +string Name
+   +string LocalizedName
+   +string Image
+}
+Step --> Instruction
+Equipment --> Step
+Ingredient --> Step
+Length --> Step
 
  class AppUI{
     -Recipe recipe
@@ -182,4 +218,5 @@ classDiagram
  DataBaseWorker --> DBContext
  AppUI --> RecipeHelper
  HttpHelper --> DataBaseWorker
+ Instruction--> RecipeHelper
     ```
