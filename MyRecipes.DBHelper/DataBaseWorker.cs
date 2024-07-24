@@ -9,7 +9,7 @@ namespace MyReceipts.App
     {
         private LogToFile _logger = new LogToFile();
 
-        public void SaveFavoriteRecipes(List<Recipe> recipes)
+        public void SaveFavoriteRecipes(List<RecipeJson> recipes)
         {
             RecipeUI recipeTemp = new RecipeUI();
             IngredientUI ingredientTemp = new IngredientUI();
@@ -40,7 +40,7 @@ namespace MyReceipts.App
             }
         }
 
-        private RecipeUI Recipe1ConvertRecipe(Recipe recipe1)
+        private RecipeUI Recipe1ConvertRecipe(RecipeJson recipe1)
         {
             if (recipe1 == null)
                 throw new ArgumentNullException(nameof(recipe1));
