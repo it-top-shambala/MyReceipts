@@ -10,12 +10,12 @@ public class AppUI
     #region Props
 
     private static RecipeHelper _recipeHelper = new();
-    private Dictionary<Recipe, Instruction> _recipesWithInstructions;
-
+    private static List<RecipeJson>? _webApiRecipes;
+    private static List<Recipe>? _recipes;
     #endregion Props
 
     #region Methods
-
+    
     public void StartMenu()
     {
         Tui startWindow = new Tui();
@@ -38,7 +38,7 @@ public class AppUI
         return choice;
     }
 
-    public bool? SearchByIngridients(List<Recipe> recipes)
+    public bool? SearchByIngridients()
     {
         bool? choice = true;
         while (choice != false)
@@ -50,9 +50,9 @@ public class AppUI
             IEnumerable<string> userIngridientsList = ingridientsSearchWindow.DrawInput()!.Split(',', ' ', ';','.').ToList();
             var filteredUserIngridientsList = userIngridientsList.Where(item => item != "").ToList();
             userIngridientsList = filteredUserIngridientsList;
-            recipes = _recipeHelper.GetRecipes(userIngridientsList);
-            _recipesWithInstructions = _recipeHelper.GetRecipeWithInstruction(userIngridientsList);
-            choice = FoundRecipesWindow(recipes);
+            _recipes = _recipeHelper.GetRecipes(userIngridientsList);
+            _webApiRecipes = _recipeHelper.GetRecipesJson(userIngridientsList);
+            choice = FoundRecipesWindow(_recipes);
 
             if (choice == null)
                 return null;
@@ -66,12 +66,11 @@ public class AppUI
         recipesWindow.Title = "Найденные рецепты";
         recipesWindow.Body = "Рецепты: ";
         
-        if (recipes != null && recipes.Count > 0)
+        if (recipes.Count > 0)
         {
-            var choice = recipesWindow.DrawList(recipes.Select<Recipe, string>(r => r.Title).ToList());
-            var recipe = recipes.First(r => r.Title == choice);
-            ShowRecipeWindow(recipe);
-            return ShowRecipeStepsWindow(recipe);
+            var choice = recipesWindow.DrawList(recipes.Select<Recipe, string>(r => r.Name).ToList());
+            var recipe = recipes.First(r => r.Name == choice);
+            return ShowRecipeWindow(recipe);
         }
         else
         {
@@ -81,70 +80,52 @@ public class AppUI
         }
     }
 
-    private void ShowRecipeWindow(Recipe recipe)
+    private bool ShowRecipeWindow(Recipe recipe)
     {
         Tui recipeWindow = new Tui();
         recipeWindow.Title = "Рецепт";
-        recipeWindow.Body = $"\n\tНазвание: {recipe.Title}\n" +
+        recipeWindow.Body = $"\n\tНазвание: {recipe.Name}\n" +
                             $"\tИнгредиенты: {ShowRecipeIngridients(recipe)}\n" +
-                            $"\n\tДля показа шагов приготовления нажмите любую клавишу\n";
-                            recipeWindow.DrawOk();
+                            $"\tШаги приготовления: \n{ShowInstructions(recipe)}\n" +
+                            $"\tДобавить рецепт в избранное?";
+                            return recipeWindow.DrawYesNo();
     }
-
-    private bool ShowRecipeStepsWindow(Recipe recipe)
+    
+    private string ShowInstructions(Recipe recipe)
     {
-        Tui recipeStepsWindow = new Tui();
-        recipeStepsWindow.Title = "Шаги приготовления";
-        recipeStepsWindow.Body = $"{ShowInstructions(recipe, _recipesWithInstructions)} \n" +
-                                 $"\tДобавить рецепт в избранное?";
-        return recipeStepsWindow.DrawYesNo();
-    }
-
-    private string ShowInstructions(Recipe recipe, Dictionary<Recipe, Instruction> recipes)
-    {
-        string result = "";
-        foreach (var item in recipes)
+        string result = string.Join(", ", recipe.Steps.Select(s => "\n" + s.Number + "\n" + s.Description));
+        if (result == "")
         {
-            if (item.Key == recipe)
-            {
-                result = string.Join("\n", item.Value.Steps.Select(s => s.Number) + " - " + item.Value.Steps.Select(s => s.StepDiscription));
-            }
-            else
-            {
-                result = "К данному рецепту отсутствует подробный процесс приготовления";
-            }
+            result = "К данному рецепту отсутствует подробный процесс приготовления";
         }
-
         return result;
     }
     private string ShowRecipeIngridients(Recipe recipe)
     {
-        string result = string.Join(", ", recipe.UsedIngredients.Select(i => i.Name));
-        result += ", " + string.Join(", ", recipe.MissedIngredients.Select(i => i.Name));
-
+        string result = string.Join(", ", recipe.Ingredients.Select(i => i.Name + " - " + i.Amount + " " + i.Unit));
         return result;
     }
 
-    public List<Recipe> FavoriteAddMenu(List<Recipe> recipes)
+    public List<RecipeJson> FavoriteAddMenu()
     {
         Tui favouriteMenuWindow = new Tui();
         favouriteMenuWindow.Title = "Добавление рецептов в список избранных";
         favouriteMenuWindow.Body = "*SPACE* выбор рецепта \n *ENTER* подтвердить";
         List<Tui.CheckBoxOption> options = new List<Tui.CheckBoxOption>();
-        foreach (var recipe in recipes)
+        foreach (var recipe in _recipes)
         {
             options.Add(
                 new Tui.CheckBoxOption()
                 {
                     IsSelected = false,
-                    Name = recipe.Title,
+                    Name = recipe.Name,
                 }
             );
         }
 
         List<Tui.CheckBoxOption> selectedRecipes = favouriteMenuWindow.DrawCheckBox(options);
         List<string> selectedRecipesNames = selectedRecipes.Select(r => r.Name).ToList();
-        List<Recipe> resultRecipes = recipes.Where(r => selectedRecipesNames.Any(n => r.Title == n)).ToList();
+        List<RecipeJson> resultRecipes = _webApiRecipes.Where(r => selectedRecipesNames.Exists(n => r.Title == n)).ToList();
         return resultRecipes;
     }
 

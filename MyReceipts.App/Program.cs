@@ -1,12 +1,10 @@
 using MyReceipts.UI;
 using MyReceipts.App;
 using MyRecipts.WebApiHelperLib.Models;
-// See https://aka.ms/new-console-template for more information
 using FoodApi;
 
 var app = new AppUI();
 var dbWorker = new DataBaseWorker();
-var webApiRecipes = new List<Recipe>();
 app.StartMenu();
 string? userChoice = "";
 while (userChoice != "2. Выход")
@@ -15,10 +13,10 @@ while (userChoice != "2. Выход")
     switch (userChoice)
     {
         case "1. Поиск рецепта по ингредиентам":
-            app.SearchByIngridients(webApiRecipes);
-            if (app.SearchByIngridients(webApiRecipes) != null)
+            app.SearchByIngridients();
+            if (app.SearchByIngridients() != null)
             {
-                var favouriteRecipes = app.FavoriteAddMenu(webApiRecipes);
+                var favouriteRecipes = app.FavoriteAddMenu();
                 dbWorker.SaveFavoriteRecipes(favouriteRecipes);
             }
             break;
@@ -26,6 +24,7 @@ while (userChoice != "2. Выход")
             break;
     }
 }
+/*
 var helper = new RecipeHelper();
 var test = helper.GetRecipes(new List<string> { "fish" });
 for (int i = 0; i < test.Count; i++)
@@ -44,3 +43,4 @@ for (int i = 0; i < test.Count; i++)
     }
     Console.WriteLine("============================");
 }
+*/
