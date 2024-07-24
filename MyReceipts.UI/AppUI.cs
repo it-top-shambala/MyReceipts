@@ -47,7 +47,7 @@ public class AppUI
             ingridientsSearchWindow.Title = "Поиск по ингредиентам";
             ingridientsSearchWindow.Body = "Введите ингредиенты";
             
-            IEnumerable<string> userIngridientsList = ingridientsSearchWindow.DrawInput()!.Split(',', ' ', ';',Convert.ToChar(", "), '.').ToList();
+            IEnumerable<string> userIngridientsList = ingridientsSearchWindow.DrawInput()!.Split(',', ' ', ';','.').ToList();
             var filteredUserIngridientsList = userIngridientsList.Where(item => item != "").ToList();
             userIngridientsList = filteredUserIngridientsList;
             recipes = _recipeHelper.GetRecipes(userIngridientsList);
@@ -87,7 +87,7 @@ public class AppUI
         recipeWindow.Title = "Рецепт";
         recipeWindow.Body = $"\n\tНазвание: {recipe.Title}\n" +
                             $"\tИнгредиенты: {ShowRecipeIngridients(recipe)}\n" +
-                            $"\tДля показа шагов приготовления нажмите любую клавишу\n";
+                            $"\n\tДля показа шагов приготовления нажмите любую клавишу\n";
                             recipeWindow.DrawOk();
     }
 
@@ -95,8 +95,8 @@ public class AppUI
     {
         Tui recipeStepsWindow = new Tui();
         recipeStepsWindow.Title = "Шаги приготовления";
-        recipeStepsWindow.Body = $"{ShowInstructions(recipe, _recipesWithInstructions)} +" +
-                                 $"Добавить рецепт в избранное?";
+        recipeStepsWindow.Body = $"{ShowInstructions(recipe, _recipesWithInstructions)} \n" +
+                                 $"\tДобавить рецепт в избранное?";
         return recipeStepsWindow.DrawYesNo();
     }
 
@@ -108,6 +108,10 @@ public class AppUI
             if (item.Key == recipe)
             {
                 result = string.Join("\n", item.Value.Steps.Select(s => s.Number) + " - " + item.Value.Steps.Select(s => s.StepDiscription));
+            }
+            else
+            {
+                result = "К данному рецепту отсутствует подробный процесс приготовления";
             }
         }
 
