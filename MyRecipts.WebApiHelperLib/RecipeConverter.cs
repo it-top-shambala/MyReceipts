@@ -20,13 +20,6 @@ namespace MyRecipts.WebApiHelperLib
 
         public static Recipe ConvertRecipeJsonToRecipe(RecipeJson recipe, Instruction instruction)
         {
-            var steps = instruction.Steps.Select(i => new RecipeStep()
-            {
-                Description = i.StepDiscription,
-                Number = i.Number,
-                Ingredients = i.Ingredients
-            }).ToList();
-
             var ingredients = recipe.UsedIngredients.Select(ing => new RecipeIngredient()
             {
                 Name = ing.Name,
@@ -43,6 +36,21 @@ namespace MyRecipts.WebApiHelperLib
 
             ingredients.AddRange(moreIng);
 
+            var steps = new List<RecipeStep>();
+
+            if (instruction is null)
+            {
+                steps = null;
+            }
+            else
+            {
+                steps = instruction.Steps?.Select(i => new RecipeStep()
+                {
+                    Description = i.StepDiscription,
+                    Number = i.Number,
+                    Ingredients = i.Ingredients
+                }).ToList();
+            }
             var res = new Recipe()
             {
                 Name = recipe.Title,
