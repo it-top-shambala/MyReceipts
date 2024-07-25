@@ -1,0 +1,7 @@
+{
+    "PathInfo": "Logs\\logs.txt",
+    "PathWarning": "Logs\\logs.txt",
+    "PathError": "Logs\\logs.txt",
+    "PathSuccess": "Logs\\logs.txt",
+    "PathCustom": "Logs\\logs.txt"
+  }

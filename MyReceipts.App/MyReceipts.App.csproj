@@ -22,4 +22,10 @@
         <ProjectReference Include="..\MyRecipes.DBHelper\MyRecipes.DBHelper.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="log_paths.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
