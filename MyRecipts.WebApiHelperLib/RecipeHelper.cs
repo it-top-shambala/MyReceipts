@@ -1,4 +1,5 @@
 ﻿using Logger.File;
+using MyRecipts.WebApiHelperLib;
 using MyRecipts.WebApiHelperLib.Exceptions;
 using MyRecipts.WebApiHelperLib.Models;
 using NewApiTest.models;
@@ -12,7 +13,6 @@ public class RecipeHelper
     private LogToFile _logger;
     private const string PATH_CFG = "Configs\\ConfigRecipeHelper.json";
     private ConfigRecipeHepler _config;
-
     public RecipeHelper()
     {
         InitConfig();
@@ -20,11 +20,24 @@ public class RecipeHelper
         _logger = new LogToFile(_config.PathToLogger);
     }
 
-    public Dictionary<Recipe, Instruction?>? GetRecipeWithInstruction(IEnumerable<string> ingredients)
+    public List<Recipe>? GetRecipes(IEnumerable<string> ingredients)
     {
-        var res = new Dictionary<Recipe, Instruction?>();
+        var rawRecipes = GetRecipeWithInstruction(ingredients);
+        if (rawRecipes is null)
+        {
+            _logger.Warning($"{typeof(RecipeJson)} не были инециализированы");
+            return null;
+        }
 
-        var recipes = GetRecipes(ingredients);
+        var recipes = RecipeConverter.ConvertAllRecipesJsonToRecipes(rawRecipes);
+        return recipes;
+    }
+
+    private Dictionary<RecipeJson, Instruction?>? GetRecipeWithInstruction(IEnumerable<string> ingredients)
+    {
+        var res = new Dictionary<RecipeJson, Instruction?>();
+
+        var recipes = GetRecipesJson(ingredients);
         if (recipes is null)
             return null;
 
@@ -36,7 +49,7 @@ public class RecipeHelper
         return res;
     }
 
-    public Instruction? GetInstruction(Recipe recipe)
+    public Instruction? GetInstruction(RecipeJson recipe)
     {
         var jsonStrings = GetInstructionForRecipe(recipe.Id);
         var res = new Instruction();
@@ -59,17 +72,17 @@ public class RecipeHelper
         return res;
     }
 
-    public List<Recipe>? GetRecipes(IEnumerable<string> ingredients)
+    public List<RecipeJson>? GetRecipesJson(IEnumerable<string> ingredients)
     {
         try
         {
             var jsonString = GetResponseJsonFromHttpCLient(ingredients);
-            var res = JsonSerializer.Deserialize<List<Recipe>>(jsonString);
+            var res = JsonSerializer.Deserialize<List<RecipeJson>>(jsonString);
             return res;
         }
         catch (Exception ex)
         {
-            _logger.Error($"Ошибка при десиреализации {typeof(Recipe)}: {ex.Message}");
+            _logger.Error($"Ошибка при десиреализации {typeof(RecipeJson)}: {ex.Message}");
             return null;
         }
     }
