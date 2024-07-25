@@ -1,6 +1,5 @@
 using FoodApi;
 using MyRecipts.WebApiHelperLib.Models;
-using NewApiTest.models;
 using tui_netcore;
 
 namespace MyReceipts.UI;

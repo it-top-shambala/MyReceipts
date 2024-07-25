@@ -1,7 +1,6 @@
 using MyReceipts.UI;
 using MyReceipts.App;
-using MyRecipts.WebApiHelperLib.Models;
-using FoodApi;
+
 
 var app = new AppUI();
 var dbWorker = new DataBaseWorker();
